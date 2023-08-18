@@ -39,6 +39,7 @@ class OrderServiceTest {
     @Autowired
     MemberRepository memberRepository;
 
+    // 테스트를 위해 주문할 상품 및 회원 정보 저장하는 메서드
     public Item saveItem(){
         Item item = new Item();
         item.setItemNm("테스트 상품");
@@ -63,18 +64,18 @@ class OrderServiceTest {
         Member member = saveMember();
 
         OrderDto orderDto = new OrderDto();
-        orderDto.setCount(10);
-        orderDto.setItemId(item.getId());
+        orderDto.setCount(10); // 주문 상품 수량을 orderDto 객체에 세팅
+        orderDto.setItemId(item.getId()); // 주문 상품 번호를 orderDto 객체에 세팅
 
-        Long orderId = orderService.order(orderDto, member.getEmail());
+        Long orderId = orderService.order(orderDto, member.getEmail()); // 주문 로직 -> 주문 번호 생성
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(EntityNotFoundException::new); // 주문 로직으로 생성된 주문 번호로 repository/db에서 해당 주문 조회
 
         List<OrderItem> orderItems = order.getOrderItems();
 
-        int totalPrice = orderDto.getCount()*item.getPrice();
+        int totalPrice = orderDto.getCount()*item.getPrice(); // 주문한 상품의 총 가격 구함
 
-        assertEquals(totalPrice, order.getTotalPrice());
+        assertEquals(totalPrice, order.getTotalPrice()); // db에 저장된 order(주문) 객체/정보의 총 주문 가격과 예상 총 가격이 동일한지 비교
     }
 
     @Test

@@ -27,39 +27,44 @@
             $("#totalPrice").html(totalPrice + '원');
         }
 
+        // form 태그 + submit 방식으로 서버에 요청하면 페이지가 새로 고침됨 vs 웹페이지 새로 고침 없이 서버에 주문 요청하기 위해 비동기 방식(Ajax) 사용 -> 2023.8.19(토) 14h35 나의 질문 = 왜 여기서 페이지가 새로 고침되면 안 되지? 왜 Ajax로 굳이 호출하지?
         function order(){
+            // Spring Security 사용하는 경우 기본적으로 post 방식 데이터 전송에는 CSRF 토큰 값 필요 -> 해당 값 조회
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
 
             var url = "/order";
+
+            // 주문 상품 ID 및 주문 수량 데이터를 전달할 객체 생성
             var paramData = {
                 itemId : $("#itemId").val(),
                 count : $("#count").val()
             };
 
+            // 서버에 보낼 주문 데이터를 json으로 변경
             var param = JSON.stringify(paramData);
 
             $.ajax({
                 url      : url,
                 type     : "POST",
-                contentType : "application/json",
+                contentType : "application/json", // 서버에 보낼 데이터 형식을 json으로 지정
                 data     : param,
                 beforeSend : function(xhr){
                     /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
                     xhr.setRequestHeader(header, token);
                 },
-                dataType : "json",
+                dataType : "json", // 서버로부터 결과 값으로 받을 데이터 형식을 json으로 지정
                 cache   : false,
-                success  : function(result, status){
+                success  : function(result, status){ // 주문 로직 호출 성공 시 '주문이 완료되었습니다' 메시지 보여주고 -> 메인 페이지로 이동
                     alert("주문이 완료 되었습니다.");
                     location.href='/';
                 },
                 error : function(jqXHR, status, error){
 
-                    if(jqXHR.status == '401'){
+                    if(jqXHR.status == '401'){ // 현재 로그인 상태가 아닌 경우
                         alert('로그인 후 이용해주세요');
                         location.href='/members/login';
-                    } else{
+                    } else{ // 주문 로직 호출 시 에러 발생하면 해당 에러 메시지를 보여줌
                         alert(jqXHR.responseText);
                     }
 
