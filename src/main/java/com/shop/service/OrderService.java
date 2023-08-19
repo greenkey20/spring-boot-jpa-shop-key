@@ -54,17 +54,17 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Page<OrderHistDto> getOrderList(String email, Pageable pageable) {
 
-        List<Order> orders = orderRepository.findOrders(email, pageable);
+        List<Order> orders = orderRepository.findOrders(email, pageable); // user의 아이디 + 페이징 조건 -> db에서 해당 회원의 주문 내역 목록 조회
         Long totalCount = orderRepository.countOrder(email);
 
         List<OrderHistDto> orderHistDtos = new ArrayList<>();
 
-        for (Order order : orders) {
+        for (Order order : orders) { // 주문 리스트를 순회하며 -> 구매 이력 페이지 응답 내용으로 전달할 DTO 생성
             OrderHistDto orderHistDto = new OrderHistDto(order);
             List<OrderItem> orderItems = order.getOrderItems();
             for (OrderItem orderItem : orderItems) {
                 ItemImg itemImg = itemImgRepository.findByItemIdAndRepimgYn
-                        (orderItem.getItem().getId(), "Y");
+                        (orderItem.getItem().getId(), "Y"); // 주문 상품의 대표 이미지 조회
                 OrderItemDto orderItemDto =
                         new OrderItemDto(orderItem, itemImg.getImgUrl());
                 orderHistDto.addOrderItemDto(orderItemDto);
@@ -73,7 +73,7 @@ public class OrderService {
             orderHistDtos.add(orderHistDto);
         }
 
-        return new PageImpl<OrderHistDto>(orderHistDtos, pageable, totalCount);
+        return new PageImpl<OrderHistDto>(orderHistDtos, pageable, totalCount); // Page 구현 객체 생성하여 반환
     }
 
     @Transactional(readOnly = true)
@@ -93,7 +93,7 @@ public class OrderService {
     public void cancelOrder(Long orderId){
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(EntityNotFoundException::new);
-        order.cancelOrder();
+        order.cancelOrder(); //
     }
 
     public Long orders(List<OrderDto> orderDtoList, String email){
