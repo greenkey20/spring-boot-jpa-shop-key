@@ -47,7 +47,7 @@ public class OrderController {
         }
 
         String email = principal.getName();
-        Long orderId;
+        Long orderId; // 주문 로직 호출 결과 = 처리 결과 생성된 주문 번호
 
         try {
             orderId = orderService.order(orderDto, email);

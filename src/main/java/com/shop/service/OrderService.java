@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class OrderService {
 
     private final ItemImgRepository itemImgRepository;
 
-    public Long order(OrderDto orderDto, String email){
+    public Long order(OrderDto orderDto, String email) {
 
         Item item = itemRepository.findById(orderDto.getItemId())
                 .orElseThrow(EntityNotFoundException::new);
@@ -77,28 +78,30 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public boolean validateOrder(Long orderId, String email){
+    public boolean validateOrder(Long orderId, String email) {
         Member curMember = memberRepository.findByEmail(email);
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(EntityNotFoundException::new);
         Member savedMember = order.getMember();
 
-        if(!StringUtils.equals(curMember.getEmail(), savedMember.getEmail())){
+        if (!StringUtils.equals(curMember.getEmail(), savedMember.getEmail())) {
             return false;
         }
 
         return true;
     }
 
-    public void cancelOrder(Long orderId){
+    public void cancelOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(EntityNotFoundException::new);
         order.cancelOrder(); //
     }
 
-    public Long orders(List<OrderDto> orderDtoList, String email){
+    public Long orders(List<OrderDto> orderDtoList, String email) {
 
         Member member = memberRepository.findByEmail(email);
+
+        // 주문할 상품 리스트 생성
         List<OrderItem> orderItemList = new ArrayList<>();
 
         for (OrderDto orderDto : orderDtoList) {
@@ -109,8 +112,8 @@ public class OrderService {
             orderItemList.add(orderItem);
         }
 
-        Order order = Order.createOrder(member, orderItemList);
-        orderRepository.save(order);
+        Order order = Order.createOrder(member, orderItemList); // 주문 엔티티 생성
+        orderRepository.save(order); // 해당 주문 데이터를 DB에 저장
 
         return order.getId();
     }

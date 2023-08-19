@@ -111,6 +111,7 @@ public class CartService {
     }
 
     public Long orderCartItem(List<CartOrderDto> cartOrderDtoList, String email) {
+        // 장바구니 페이지로부터 전달받은 주문 상품 번호를 이용해서, 주문 로직으로 전달할 OrderDto 객체 생성
         List<OrderDto> orderDtoList = new ArrayList<>();
 
         for (CartOrderDto cartOrderDto : cartOrderDtoList) {
@@ -124,7 +125,9 @@ public class CartService {
             orderDtoList.add(orderDto);
         }
 
-        Long orderId = orderService.orders(orderDtoList, email);
+        Long orderId = orderService.orders(orderDtoList, email); // 주문 로직 호출 -> 장바구니에 담은 상품 주문
+
+        // 금번 주문하는 상품들을 장바구니에서 제거
         for (CartOrderDto cartOrderDto : cartOrderDtoList) {
             CartItem cartItem = cartItemRepository
                     .findById(cartOrderDto.getCartItemId())

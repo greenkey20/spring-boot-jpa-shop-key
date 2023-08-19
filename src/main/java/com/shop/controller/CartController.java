@@ -114,7 +114,7 @@ public class CartController {
             }
         }
 
-        Long orderId = cartService.orderCartItem(cartOrderDtoList, principal.getName());
+        Long orderId = cartService.orderCartItem(cartOrderDtoList, principal.getName()); // 주문 로직 호출 결과 = 처리 결과 생성된 주문 번호
         return new ResponseEntity<Long>(orderId, HttpStatus.OK);
     }
 
