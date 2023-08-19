@@ -9,7 +9,7 @@
 
         $(document).ready(function(){
             $("#searchBtn").on("click",function(e) {
-                e.preventDefault();
+                e.preventDefault(); // '검색' 버튼 클릭 시 form 태그의 전송을 막아줌 -> 2023.8.18(금) 13h40 나의 질문 = 왜 막아야 하지? 아래 page() 함수에서 location href로 form 태그 요청 보내려고 해서 그런가?
                 page(0);
             });
         });
@@ -57,7 +57,7 @@
                 <td>
                     <a th:href="'/admin/item/'+${item.id}" th:text="${item.itemNm}"></a>
                 </td>
-                <td th:text="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL} ? '판매중' : '품절'"></td>
+                <td th:text="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL} ? '판매중' : '품절'"></td> <!--2023.8.18(금) 13h45 나의 생각 = 여기서 Java 상수 정의 파일의 값을 참조해서 비교하는 문법 신기하다-->
                 <td th:text="${item.createdBy}"></td>
                 <td th:text="${item.regTime}"></td>
             </tr>

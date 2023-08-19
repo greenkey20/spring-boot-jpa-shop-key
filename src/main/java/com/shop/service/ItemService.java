@@ -55,7 +55,7 @@ public class ItemService {
         return item.getId();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) // 상품 데이터를 읽어오는 트랜잭션 = 읽기 전용 -> 데이터의 수정이 일어나지 않는 바, JPA가 dirty checking(변경 감지) 수행하지 않아 성능 향상/최적화 가능
     public ItemFormDto getItemDtl(Long itemId){
         List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId);
         List<ItemImgDto> itemImgDtoList = new ArrayList<>();

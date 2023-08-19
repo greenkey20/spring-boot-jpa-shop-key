@@ -10,6 +10,14 @@ import java.util.UUID;
 @Log
 public class FileService {
 
+    /**
+     *
+     * @param uploadPath
+     * @param originalFileName
+     * @param fileData 파일의 바이트 배열
+     * @return
+     * @throws Exception
+     */
     public String uploadFile(String uploadPath, String originalFileName, byte[] fileData) throws Exception{
         UUID uuid = UUID.randomUUID();
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
