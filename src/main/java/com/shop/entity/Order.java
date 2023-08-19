@@ -60,7 +60,7 @@ public class Order extends BaseEntity {
     public void cancelOrder() {
         this.orderStatus = OrderStatus.CANCEL;
         for (OrderItem orderItem : orderItems) {
-            orderItem.cancel();
+            orderItem.cancel(); // 주문 취소 상태로 변경 -> 트랜잭션 끝날 때 변경 감지 기능에 의해 update 쿼리 실행
         }
     }
 
