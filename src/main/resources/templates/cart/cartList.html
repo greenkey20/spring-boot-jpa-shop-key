@@ -19,6 +19,7 @@
             });
         });
 
+        // 총 주문 금액 구하는 함수
         function getOrderTotalPrice(){
             var orderTotalPrice = 0;
             $("input[name=cartChkBox]:checked").each(function() {
@@ -31,14 +32,15 @@
             $("#orderTotalPrice").html(orderTotalPrice+'원');
         }
 
+        // 장바구니에 들어있는 상품 수량 변경 시, 상품 가격 * 새로운 상품 수량 곱해서 상품 금액 변경
         function changeCount(obj){
             var count = obj.value;
             var cartItemId = obj.id.split('_')[1];
             var price = $("#price_" + cartItemId).data("price");
             var totalPrice = count*price;
             $("#totalPrice_" + cartItemId).html(totalPrice+"원");
-            getOrderTotalPrice();
-            updateCartItemCount(cartItemId, count);
+            getOrderTotalPrice();  // 변경된 총 주문 금액 계산하기 위해 getOrderTotalPrice() JavaScript 함수 호출
+            updateCartItemCount(cartItemId, count); // 장바구니에서 상품 수량 변경 시 해당 회원의 장바구니 상품 수량도 변경하는 로직 구현
         }
 
         function checkAll(){
@@ -58,7 +60,7 @@
 
             $.ajax({
                 url      : url,
-                type     : "PATCH",
+                type     : "PATCH", // 부분 업데이트인 바, "PATCH" 타입으로 설정
                 beforeSend : function(xhr){
                     /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
                     xhr.setRequestHeader(header, token);
@@ -98,7 +100,7 @@
                 dataType : "json",
                 cache   : false,
                 success  : function(result, status){
-                    location.href='/cart';
+                    location.href='/cart'; // 삭제 Ajax 요청이 정상적으로 처리되면, 장바구니 페이지를 새로고침함
                 },
                 error : function(jqXHR, status, error){
 

@@ -20,6 +20,7 @@ public class Cart extends BaseEntity {
     @JoinColumn(name="member_id")
     private Member member;
 
+    // 2023.8.19(토) 21h45 나의 생각/질문 = 도메인/엔티티 영역에 있는, 이렇게 엔티티의 상태를 변경하는 메서드들을 static이 아닌 것으로 만들면 어떤 일이 일어나는가?
     public static Cart createCart(Member member){
         Cart cart = new Cart();
         cart.setMember(member);
